@@ -23,6 +23,7 @@ io.on('connection', (socket) => {
   socket.emit('server_message', 'WebSocket Connected!');
 });
 
-server.listen(port, () => {
-  console.log(`Backend listening at http://localhost:${port}`);
+server.listen(port, '0.0.0.0', () => {
+  console.log(`Backend listening at http://0.0.0.0:${port}`);
 });
+
