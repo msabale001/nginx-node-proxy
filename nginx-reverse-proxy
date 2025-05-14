@@ -1,0 +1,32 @@
+server{
+  listen 80;
+  server_name 13.220.104.116:8080;
+
+  root/var/www/fontend;
+  index index.html;
+
+  #server static files
+  location/{
+    try_files $uri $uri/ =404;
+  }
+
+  #reverse proxy to node.js
+  location/api/{
+    proxy_pass http://13.220.104.116:3000;
+    proxy_http_version 1.1;
+
+    proxy_set_header Host $host;
+    proxy_set_header X_real-IP $remote_addr;
+    proxy_set_header X-forwarded-For $proxy_add_x_forwarded_for;
+  }
+
+  #WebSocket support
+  location /socket.io/{
+    proxy_pass http://13.220.104.116:3000;
+    proxy_http_version 1.1;
+
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+  }
+}
